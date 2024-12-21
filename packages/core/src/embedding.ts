@@ -104,13 +104,12 @@ export function getEmbeddingType(runtime: IAgentRuntime): "local" | "remote" {
 
     // Use local embedding if:
     // - Running in Node.js
-    // - Not using OpenAI provider
     // - Not forcing OpenAI embeddings
     const isLocal =
         isNode &&
-        runtime.character.modelProvider !== ModelProviderName.OPENAI &&
         runtime.character.modelProvider !== ModelProviderName.GAIANET &&
-        !settings.USE_OPENAI_EMBEDDING;
+        (runtime.character.modelProvider !== ModelProviderName.OPENAI ||
+        !settings.USE_OPENAI_EMBEDDING)
 
     return isLocal ? "local" : "remote";
 }
